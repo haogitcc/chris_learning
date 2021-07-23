@@ -1,6 +1,5 @@
-package com.chris.test;
+package com.chris.test.days02;
 
-import java.io.Writer;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
@@ -32,13 +31,13 @@ public class TestCountDownLatch {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "子线程" + Thread.currentThread().getName() + "正在执行");
+                System.out.println("子线程" + Thread.currentThread().getName() + "正在执行");
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Log.d(TAG, "子线程" + Thread.currentThread().getName() + "执行完毕");
+                System.out.println("子线程" + Thread.currentThread().getName() + "执行完毕");
                 countDownLatch.countDown();
             }
         }).start();
@@ -46,20 +45,20 @@ public class TestCountDownLatch {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "子线程" + Thread.currentThread().getName() + "正在执行");
+                System.out.println("子线程" + Thread.currentThread().getName() + "正在执行");
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Log.d(TAG, "子线程" + Thread.currentThread().getName() + "执行完毕");
+                System.out.println("子线程" + Thread.currentThread().getName() + "执行完毕");
                 countDownLatch.countDown();
             }
         }).start();
 
-        Log.d(TAG, "等待2线程执行完毕");
+        System.out.println("等待2线程执行完毕");
         countDownLatch.await();
-        Log.d(TAG, "2个线程已经执行完毕");
+        System.out.println("2个线程已经执行完毕");
     }
 
     static void testCyclicBarrier(){
@@ -95,21 +94,21 @@ public class TestCountDownLatch {
             if(isCyclicBarrier) {
                 try {
                     Thread.sleep(3000);
-                    Log.d(TAG, "子线程_" + id + ", " + Thread.currentThread().getName() + "执行完毕");
+                    System.out.println("子线程_" + id + ", " + Thread.currentThread().getName() + "执行完毕");
                     cyclicBarrier.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (BrokenBarrierException e) {
                     e.printStackTrace();
                 }
-                Log.d(TAG, "子线程_" + id + ", " + Thread.currentThread().getName() + "所有线程执行完毕");
+                System.out.println("子线程_" + id + ", " + Thread.currentThread().getName() + "所有线程执行完毕");
             }
             else if(isSemaphore) {
                 try {
                     semaphore.acquire();
-                    Log.d(TAG, "子线程_" + id + ", " + Thread.currentThread().getName() + "占用");
+                    System.out.println("子线程_" + id + ", " + Thread.currentThread().getName() + "占用");
                     Thread.sleep(2000);
-                    Log.d(TAG, "子线程_" + id + ", " + Thread.currentThread().getName() + "执行完毕");
+                    System.out.println("子线程_" + id + ", " + Thread.currentThread().getName() + "执行完毕");
                     semaphore.release();
                 } catch (InterruptedException e) {
                     e.printStackTrace();

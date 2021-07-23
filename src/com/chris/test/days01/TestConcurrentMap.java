@@ -1,9 +1,9 @@
-package com.chris.test;
+package com.chris.test.days01;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
-public class testConcurrentMap {
+public class TestConcurrentMap {
     static ConcurrentHashMap<String, String> concurrentMap = new ConcurrentHashMap();
     static CountDownLatch countDownLatch = new CountDownLatch(3);
     public static void main(String[] args) {

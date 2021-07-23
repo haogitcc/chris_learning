@@ -21,9 +21,15 @@
 > 目前Oracle提供的Windows下的JDK安装工具会同时安装一个正常的JRE和隶属于JDK目录下的JRE。
 
 ### 1. 线程
-Hotspot JVM 中的 Java 线程与原生操作系统线程有直接的映射关系。
+JVM允许一个程序使用多个并发线程，**Hotspot JVM**中Java的线程与原生操作系统的线程是直接映射关系。
 
-|Hotspot JVM 后台运行的系统线程主要有下面几个：
+即当线程本地存储、缓冲区分配、同步对象、栈、程序计数器等准备好以后，就会创建一个操作系统原生线程。
+Java 线程结束，原生线程随之被回收。操作系统负责调度所有线程，并把它们分配到任何可用的 CPU 上。
+当原生线程初始化完毕，就会调用 Java 线程的 run() 方法。run() 返回时，被处理未捕获异常，
+原生线程将确认由于它的结束是否要终止 JVM 进程（比如这个线程是最后一个非守护线程）。
+当线程结束时，会释放原生线程和 Java 线程的所有资源。
+
+Hotspot JVM后台运行的系统线程主要有下面几个：
 
 |结构 |	解释
 |:---|:---
@@ -42,10 +48,9 @@ JVM主要包括：
 - 方法区(Method Area)
 
 详细的结构如下：
-![alt png](pic/JVM结构.png "JVM结构")
+![alt JVM结构.png](pic/JVM结构.png "JVM结构")
 
-![alt png](pic/JVM内存存储区.png "JVM内存存储区")
-
+![alt JVM内存存储区.png](pic/JVM内存存储区.png "JVM内存存储区")
 
 #### 1. 程序计数器(PC, Program Counter) <u>（线程私有ThreadLocal）</u>
 是一个寄存器，可以看作是代码行号指示器，类似于实际计算机里的PC，用于指示，跳转下一条需要执行的命令。
@@ -98,8 +103,8 @@ JVM 可以选择符号引用解析的时机，
 本地方法栈如其名字，和Java Virtual Machine Stack其实极为类似，只是执行的是Native方法，为Native方法服务。
 在JVM规范中，没有对它的实现做具体规定。
 
-#### 4. Java 堆(Heap, Garbage Collection Heap) <u>（线程共享ThreadShared）</u>
-![alt png](pic/Java垃圾回收.png)
+#### 4. Java 堆(Heap, Garbage Collection Heap) <u>（线程共享ThreadShared）</u> - 运行时数据区
+![alt Java垃圾回收.png](pic/Java垃圾回收.png "Java垃圾回收")
 
 Java堆是被所有线程共享的一块区域，在虚拟机启动时创建。此内存区域的唯一目的就是存放对象实例，
 几乎所有的对象实例都在这里分配内存(随着技术的发展，已不绝对)。
@@ -123,7 +128,7 @@ Java虚拟机规范对方法区的规定很宽松，甚至可以不实现GC。�
 #### 6. 代码缓存(Code Cache)
 用于编译和存储那些被 JIT 编译器编译成原生代码的方法。
 
-##### 7. 类信息(Class Data)
+#### 7. 类信息(Class Data)
 类信息存储在方法区，其主要构成为运行时常量池(Run-Time Constant Pool)和方法(Method Code)。
 
 一个编译后的类文件包括以下结构：
@@ -158,39 +163,83 @@ Native函数库可以直接分配堆外内存，通过存储在Java堆里的Dire
 直接内存是堆外内存，自然不受Java堆大小的限制，但是可能受实体机内存大小的限制。如果内存各部分总和大于实体机的内存时，
 也会报出OutOfMemoryError。
 
-#### 10. Java垃圾回收
-将内存中不再被使用的对象进行回收，GC中用于回收的方法称为收集器，由于GC需要消耗一些资源和时间，
-Java在对对象的生命周期特征进行分析后，按照新生代、旧生代的方式来对对象进行收集，以尽可能的缩短GC对应用造成的暂停。
+### 3. JVM运行时内存
+Java 堆从 GC 的角度还可以细分为: 新生代(Eden 区、From Survivor 区和 To Survivor 区)和老年代。
 
+![alt JVM运行时内存.png](pic/JVM运行时内存.png "JVM运行时内存")
+
+- 新生代
+    - Eden 区
+    - ServivorFrom
+    - ServivorTo
+> MinorGC 的过程（复制->清空->互换）
+> 
+> 1. eden、servicorFrom 复制到 ServicorTo，年龄+1
+> 2. 清空 eden、servicorFrom
+> 3. ServicorTo 和 ServicorFrom 互换
+
+- 老年代
+- 永久代
+
+### 4. 垃圾回收与算法
+将内存中不再被使用的对象进行回收，GC中用于回收的方法称为收集器，由于GC需要消耗一些资源和时间，
+1. 如何确定垃圾
+   - 引用计数法
+   - 可达性分析
+2. 标记清除算法（Mark-Sweep）
+3. 复制算法（copying）
+4. 标记整理算法(Mark-Compact)
+5. 分代收集算法
+    - 新生代与复制算法
+    - 老年代与标记复制算法
+
+- 分代收集算法
+- 分区收集算法
+
+### 5. Java中四种引用类型
 不同的对象引用类型， GC会采用不同的方法进行回收，JVM对象的引用分为了四种类型：
 - 强引用：默认情况下，对象采用的均为强引用（这个对象的实例没有其他对象引用，GC时才会被回收）。
 - 软引用：软引用是Java中提供的一种比较适合于缓存场景的应用（只有在内存不够用的情况下才会被GC）。
 - 弱引用：在GC时一定会被GC回收。
 - 虚引用：由于虚引用只是用来得知对象是否被GC。
 
-#### 11. JVM线程与原生线程的关系
-JVM允许一个程序使用多个并发线程，**Hotspot JVM**中Java的线程与原生操作系统的线程是直接映射关系。
-即当线程本地存储、缓冲区分配、同步对象、栈、程序计数器等准备好以后，就会创建一个操作系统原生线程。
-Java 线程结束，原生线程随之被回收。操作系统负责调度所有线程，并把它们分配到任何可用的 CPU 上。
-当原生线程初始化完毕，就会调用 Java 线程的 run() 方法。run() 返回时，被处理未捕获异常，
-原生线程将确认由于它的结束是否要终止 JVM 进程（比如这个线程是最后一个非守护线程）。
-当线程结束时，会释放原生线程和 Java 线程的所有资源。
-
-### 3. JVM运行时内存
-![alt png](pic/JVM运行时内存.png "JVM运行时内存")
-
-### 4. 垃圾回收与算法
-### 5. Java中四种引用类型
 ### 6. GC分代收集算法 vs 分区收集算法
+Java在对对象的生命周期特征进行分析后，按照新生代、旧生代的方式来对对象进行收集，以尽可能的缩短GC对应用造成的暂停。
+
 ### 7. GC垃圾收集器
+- Serial 垃圾收集器（单线程、复制算法）
+- ParNew 垃圾收集器（Serial+多线程）
+- Parallel Scavenge 收集器（多线程复制算法、高效）
+- Serial Old 收集器（单线程标记整理算法 ）
+- CMS 收集器（多线程标记清除算法）
+- G1 收集器
 ### 8. Java IO/NIO
+
 ### 9. JVM类加载机制
 
 ## 2. Java集合
 ### 1. 接口继承关系和实现
+#### 集合框架
+![alt 集合框架](pic/集合框架.png "集合框架")
+
+
+![alt Collection](pic/Collection.png "Collection")
+![alt AbstractCollection<E>](pic/AbstractCollection.png "AbstractCollection<E>")
+
+#### Map<K, V>
+![alt Map<K, V>](pic/Map.png "Map<K, V>")
+
 ### 2. List
+#### 1. LinkList
+![alt LinkList<E>](pic/LinkedList.png "LinkList<E>")
+
 ### 3. Set
+#### 1. HashSet<E>
+![alt HashSet<E>](pic/HashSet.png "HashSet<E>")
+
 ### 4. Map
+#### 1. HashMap<K,V>
+![alt HashMap<K,V>](pic/HashMap.png "HashMap<K,V>")
 
 ## 3. Java多线程并发
 ### 1. JAVA 并发知识库
@@ -221,7 +270,83 @@ Java 线程结束，原生线程随之被回收。操作系统负责调度所有
 ## 3. Java基础
 ### 1. JAVA 异常分类及处理
 ### 2. JAVA 反射
+#### 动态语言
+
+在 Java 中的反射机制是指在运行状态中，对于任意一个类都能够知道这个类所有的属性和方法；
+并且对于任意一个对象，都能够调用它的任意一个方法；这种动态获取信息以及动态调用对象方法的功能成为 Java 语言的反射机制。
+
+#### Java反射API
+
+反射 API 用来生成 JVM 中的类、接口或则对象的信息。
+1. Class 类：反射的核心类，可以获取类的属性，方法等信息。
+2. Field 类：Java.lang.reflec 包中的类，表示类的成员变量，可以用来获取和设置类之中的属性值。
+3. Method 类： Java.lang.reflec 包中的类，表示类的方法，它可以用来获取类中的方法信息或者执行方法。
+4. Constructor 类： Java.lang.reflec 包中的类，表示类的构造方法。
+
+反射使用步骤（获取 Class 对象、调用对象方法）
+1. 获取想要操作的类的 Class 对象，他是反射的核心，通过 Class 对象我们可以任意调用类的方法。
+2. 调用 Class 类中的方法，既就是反射的使用阶段。
+3. 使用反射 API 来操作这些信息。 
+
+反射的应用场合   
+- 编译时类型和运行时类型
+- 编译时类型无法获取具体方法
+
+获取 Class 对象的 3 种方法
+1. 调用某个对象的 getClass()方法
+```java
+   Person p=new Person();
+   Class clazz=p.getClass();
+```
+2. 调用某个类的 class 属性来获取该类对应的 Class 对象
+```java
+   Class clazz=Person.class;
+```
+3. 使用 Class 类中的 forName()静态方法(最安全/性能最好)
+```java
+    Class clazz=Class.forName("类的全路径"); //(最常用)
+```
+
+创建对象的两种方法
+1. Class 对象的 newInstance()
+   ```java
+   //获取 Person 类的 Class 对象
+   Class clazz=Class.forName("com.chris.test.aaclazz.Person");
+   //使用.newInstane 方法创建对象
+   Person p = (Person) clazz.newInstance();
+   ```
+2. 调用 Constructor 对象的 newInstance()
+    ```java
+    //获取构造方法并创建对象
+    Constructor c = clazz.getDeclaredConstructor();
+    //创建对象并设置属性
+    Person p1 = (Person) c.newInstance(); 
+   ```
+
+通过反射调用方法
+```java
+    //公有方法
+    Person.class.getDeclaredMethod("walk", int.class).invoke(p1, 100);
+    Person.class.getDeclaredMethod("setName", String.class).invoke(p1, "chris");
+    //私有方法
+    Method eatMethod = Person.class.getDeclaredMethod("eat");
+    eatMethod.setAccessible(true);
+    eatMethod.invoke(p1);
+```
+
+通过反射获取属性
+```java
+    //私有属性
+    Field nameField = Person.class.getDeclaredField("name");
+    nameField.setAccessible(true);
+    System.out.println("nameFiled is " + nameField.get(p1));
+```
 ### 3. JAVA 注解
+Annotation（注解）是 Java 提供的一种对元程序中元素关联信息和元数据（metadata）的途径和方法。
+
+Annatation(注解)是一个接口，程序可以通过反射来获取指定程序中元素的Annotation对象，
+然后通过该 Annotation 对象来获取注解中的元数据信息。
+
 ### 4. JAVA 内部类
 ### 5. JAVA 泛型
 ### 6. JAVA 序列化(创建可复用的 Java 对象)

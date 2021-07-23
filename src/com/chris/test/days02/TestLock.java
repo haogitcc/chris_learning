@@ -1,4 +1,4 @@
-package com.chris.test;
+package com.chris.test.days02;
 
 import java.util.Random;
 import java.util.concurrent.*;
@@ -13,8 +13,8 @@ public class TestLock {
     private static Random random = new Random();
 
     public static void main(String[] args) {
-        Log.d(TAG, "main");
-//        testSyncData();
+        System.out.println("main");
+        testSyncData();
 //        testReadWriteData();
 //        testLockData();
     }
@@ -25,17 +25,17 @@ public class TestLock {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d(TAG, Thread.currentThread().getName() + " run");
+                    System.out.println(Thread.currentThread().getName() + " run");
                     int data = random.nextInt(30);
-                    Log.d(TAG, Thread.currentThread().getName() + " set data=" + data);
+                    System.out.println(Thread.currentThread().getName() + " set data=" + data);
                     syncData.setSyncData(data);
                     try {
                         Thread.sleep(SLEEP_MS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Log.d(TAG, Thread.currentThread().getName() + " get data=" + syncData.getSyncData());
-                    Log.d(TAG, "================================================================");
+                    System.out.println(Thread.currentThread().getName() + " get data=" + syncData.getSyncData());
+                    System.out.println("================================================================");
                 }
             }, "thread_SyncData_" + i).start();
         }
@@ -47,17 +47,17 @@ public class TestLock {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d(TAG, Thread.currentThread().getName() + " run");
+                    System.out.println(Thread.currentThread().getName() + " run");
                     int data = random.nextInt(30);
-                    Log.d(TAG, Thread.currentThread().getName() + " set data=" + data);
+                    System.out.println(Thread.currentThread().getName() + " set data=" + data);
                     syncData.setData(data);
                     try {
                         Thread.sleep(SLEEP_MS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Log.d(TAG, Thread.currentThread().getName() + " get data=" + syncData.getData());
-                    Log.d(TAG, "================================================================");
+                    System.out.println(Thread.currentThread().getName() + " get data=" + syncData.getData());
+                    System.out.println("================================================================");
                 }
             }, "thread_ReadWriteData_" + i).start();
         }
@@ -69,9 +69,9 @@ public class TestLock {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d(TAG, Thread.currentThread().getName() + " run");
+                    System.out.println(Thread.currentThread().getName() + " run");
                     int data = random.nextInt(30);
-                    Log.d(TAG, Thread.currentThread().getName() + " set data=" + data);
+                    System.out.println(Thread.currentThread().getName() + " set data=" + data);
                     try {
                         syncData.put(data);
                     } catch (InterruptedException e) {
@@ -82,8 +82,8 @@ public class TestLock {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Log.d(TAG, Thread.currentThread().getName() + " get data=" + syncData.take());
-                    Log.d(TAG, "================================================================");
+                    System.out.println(Thread.currentThread().getName() + " get data=" + syncData.take());
+                    System.out.println("================================================================");
                 }
             }, "thread_LockData_" + i).start();
         }
