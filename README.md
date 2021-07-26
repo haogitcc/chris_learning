@@ -1,5 +1,8 @@
-# Markdown语法
-[markdown语法学习](Markdown.md)
+# 前置内容
+
+## [markdown语法学习](markdown/Markdown.md)
+
+## [网络知识](markdown/Net.md)
 
 # chris_learn_java
 > 重温Java基础知识
@@ -48,9 +51,9 @@ JVM主要包括：
 - 方法区(Method Area)
 
 详细的结构如下：
-![alt JVM结构.png](pic/JVM结构.png "JVM结构")
+![alt JVM结构.png](pic/java/JVM结构.png "JVM结构")
 
-![alt JVM内存存储区.png](pic/JVM内存存储区.png "JVM内存存储区")
+![alt JVM内存存储区.png](pic/java/JVM内存存储区.png "JVM内存存储区")
 
 #### 1. 程序计数器(PC, Program Counter) <u>（线程私有ThreadLocal）</u>
 是一个寄存器，可以看作是代码行号指示器，类似于实际计算机里的PC，用于指示，跳转下一条需要执行的命令。
@@ -104,7 +107,7 @@ JVM 可以选择符号引用解析的时机，
 在JVM规范中，没有对它的实现做具体规定。
 
 #### 4. Java 堆(Heap, Garbage Collection Heap) <u>（线程共享ThreadShared）</u> - 运行时数据区
-![alt Java垃圾回收.png](pic/Java垃圾回收.png "Java垃圾回收")
+![alt Java垃圾回收.png](pic/java/Java垃圾回收.png "Java垃圾回收")
 
 Java堆是被所有线程共享的一块区域，在虚拟机启动时创建。此内存区域的唯一目的就是存放对象实例，
 几乎所有的对象实例都在这里分配内存(随着技术的发展，已不绝对)。
@@ -166,7 +169,7 @@ Native函数库可以直接分配堆外内存，通过存储在Java堆里的Dire
 ### 3. JVM运行时内存
 Java 堆从 GC 的角度还可以细分为: 新生代(Eden 区、From Survivor 区和 To Survivor 区)和老年代。
 
-![alt JVM运行时内存.png](pic/JVM运行时内存.png "JVM运行时内存")
+![alt JVM运行时内存.png](pic/java/JVM运行时内存.png "JVM运行时内存")
 
 - 新生代
     - Eden 区
@@ -220,26 +223,26 @@ Java在对对象的生命周期特征进行分析后，按照新生代、旧生�
 ## 2. Java集合
 ### 1. 接口继承关系和实现
 #### 集合框架
-![alt 集合框架](pic/集合框架.png "集合框架")
+![alt 集合框架](pic/java/集合框架.png "集合框架")
 
 
-![alt Collection](pic/Collection.png "Collection")
-![alt AbstractCollection<E>](pic/AbstractCollection.png "AbstractCollection<E>")
+![alt Collection](pic/java/Collection.png "Collection")
+![alt AbstractCollection<E>](pic/java/AbstractCollection.png "AbstractCollection<E>")
 
 #### Map<K, V>
-![alt Map<K, V>](pic/Map.png "Map<K, V>")
+![alt Map<K, V>](pic/java/Map.png "Map<K, V>")
 
 ### 2. List
 #### 1. LinkList
-![alt LinkList<E>](pic/LinkedList.png "LinkList<E>")
+![alt LinkList<E>](pic/java/LinkedList.png "LinkList<E>")
 
 ### 3. Set
 #### 1. HashSet<E>
-![alt HashSet<E>](pic/HashSet.png "HashSet<E>")
+![alt HashSet<E>](pic/java/HashSet.png "HashSet<E>")
 
 ### 4. Map
 #### 1. HashMap<K,V>
-![alt HashMap<K,V>](pic/HashMap.png "HashMap<K,V>")
+![alt HashMap<K,V>](pic/java/HashMap.png "HashMap<K,V>")
 
 ## 3. Java多线程并发
 ### 1. JAVA 并发知识库
