@@ -1,5 +1,7 @@
 # 前置内容
 
+## 彩蛋 [surprise](markdown/PMP.md)
+
 ## [markdown语法学习](markdown/Markdown.md)
 
 ## [网络知识](markdown/Net.md)
