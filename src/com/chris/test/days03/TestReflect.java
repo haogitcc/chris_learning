@@ -4,12 +4,11 @@ import com.chris.test.aaclazz.Person;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class TestReflect {
     public static void main(String[] args) {
-//        test();
+        test();
 //        getDeclaredMethods:
 //        method: public java.lang.String com.chris.test.aaclazz.Person.getName()
 //        method: public void com.chris.test.aaclazz.Person.setName(java.lang.String)
@@ -27,7 +26,7 @@ public class TestReflect {
         }
     }
 
-    private static void testObj() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, NoSuchFieldException {
+    private static void testObj() throws Exception {
         //获取 Person 类的 Class 对象
         Class clazz=Class.forName("com.chris.test.aaclazz.Person");
         //使用.newInstane 方法创建对象
@@ -86,12 +85,14 @@ public class TestReflect {
         for (Method m:methods) {
             System.out.println("method: " + m.toString());
         }
+        System.out.println();
         //获取 Person 类的所有成员属性信息
         System.out.println("getDeclaredFields:");
         Field[] field=clazz.getDeclaredFields();
         for(Field f:field){
             System.out.println("field: " + f.toString());
         }
+        System.out.println();
         //获取 Person 类的所有构造方法信息
         System.out.println("getDeclaredConstructors:");
         Constructor[] constructor=clazz.getDeclaredConstructors();

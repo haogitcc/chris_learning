@@ -28,4 +28,8 @@ public class Person extends Human {
     public void setName(String name) {
         this.name = name;
     }
+
+    private void secretMethod() {
+        System.out.println("secretMethod call");
+    }
 }
