@@ -2,7 +2,7 @@ package com.chris.test.aaclazz;
 
 
 @AnnotationClazz("clazzForReflect")
-public class ReflectionClazz {
+public class ReflectionClazz extends ReflectionFatherClazz {
     private int secretParam1;
     private String secretParam2;
     @ValidateParam(min = 10, max = 20, value = 15)
@@ -11,6 +11,8 @@ public class ReflectionClazz {
     public int validateParam2;
     public int param1;
     public String param2;
+    public String[] strArrParam;
+    public int[] intArrParam;
 
     public ReflectionClazz() {
         System.out.println("ReflectionClazz call");
@@ -42,6 +44,14 @@ public class ReflectionClazz {
     public String getParam2() {
         System.out.println("getParam2 call");
         return param2;
+    }
+
+    public String[] getStrArrParam() {
+        return strArrParam;
+    }
+
+    public int[] getIntArrParam() {
+        return intArrParam;
     }
 
     private void secretMethod() {

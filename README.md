@@ -275,12 +275,16 @@ Java在对对象的生命周期特征进行分析后，按照新生代、旧生�
 ## 3. Java基础
 ### 1. JAVA 异常分类及处理
 ### 2. JAVA 反射
-#### 动态语言
-
-在 Java 中的反射机制是指在运行状态中，对于任意一个类都能够知道这个类所有的属性和方法；
-并且对于任意一个对象，都能够调用它的任意一个方法；这种动态获取信息以及动态调用对象方法的功能成为 Java 语言的反射机制。
 
 #### Java反射API
+
+![](pic/java/反射核心接口和类.png)
+![](pic/java/反射获取类方法属性等.png)
+![](pic/java/反射类对象获取和方法和属性等获取.png)
+![](pic/java/反射获得%20Class%20对象.png)
+![](pic/java/反射获取对象的构造方法.png)
+![](pic/java/反射获取对象的成员.png)
+![](pic/java/反射获取对象的方法.png)
 
 反射 API 用来生成 JVM 中的类、接口或则对象的信息。
 1. Class 类：反射的核心类，可以获取类的属性，方法等信息。
@@ -346,6 +350,60 @@ Java在对对象的生命周期特征进行分析后，按照新生代、旧生�
     nameField.setAccessible(true);
     System.out.println("nameFiled is " + nameField.get(p1));
 ```
+
+#### 动态语言（动态代理）
+在 Java 中的反射机制是指在运行状态中，对于任意一个类都能够知道这个类所有的属性和方法；
+
+并且对于任意一个对象，都能够调用它的任意一个方法；这种动态获取信息以及动态调用对象方法的功能成为 Java 语言的反射机制。
+
+##### InvocationHandler
+InvocationHandler 是由动态代理处理器实现的接口，对代理对象的方法调用，会路由到该处理器上进行统一处理。
+
+**核心方法**
+```java
+/**
+* proxy : 代理对象
+* method ： 调用方法
+* args : 调用方法参数
+**/
+public Object invoke(Object proxy, Method method, Object[] args) throws Throwable;
+```
+
+##### Proxy
+Proxy 用于生成代理对象。
+
+**核心方法**
+```java
+/**
+* 获取代理类<br />
+* loader : 类加载器
+* interfaces: 类实现的接口
+*
+*/
+Class<?> getProxyClass(ClassLoader loader, Class<?>... interfaces);
+/*
+* 生成代理对象<br />
+* loader : 类加载器
+* interfaces : 类实现的接口
+* h : 动态代理回调
+*/
+Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces, InvocationHandler h);
+
+/*
+* 判断是否为代理类<br />
+* 
+* cl ： 待判断类
+*/
+public static boolean isProxyClass(Class<?> cl);
+
+/*
+* 获取代理对象的InvocationHandler <br />
+*
+* proxy : 代理对象
+*/
+InvocationHandler getInvocationHandler(Object proxy);
+```
+
 ### 3. JAVA 注解
 Annotation（注解）是 Java 提供的一种对元程序中元素关联信息和元数据（metadata）的途径和方法。
 
@@ -353,6 +411,29 @@ Annatation(注解)是一个接口，程序可以通过反射来获取指定程�
 然后通过该 Annotation 对象来获取注解中的元数据信息。
 
 ### 4. JAVA 内部类
+#### 静态内部类
+
+#### 成员内部类
+
+#### 局部内部类
+
+#### 匿名内部类
+
 ### 5. JAVA 泛型
+#### 泛型方法 `<E>`
+
+`<? extends T>`表示该通配符所代表的类型是 T 类型的子类。
+
+`<? super T>`表示该通配符所代表的类型是 T 类型的父类。
+
+#### 泛型类 `<T>`
+```java
+class 类名称 <泛型标识：可以随便写任意标识号，标识指定的泛型的类型>{
+  private 泛型标识 /*（成员变量类型）*/ var; 
+  .....
+
+  }
+}
+```
 ### 6. JAVA 序列化(创建可复用的 Java 对象)
 ### 7. JAVA 复制
