@@ -6,6 +6,8 @@
 
 ## [MySQL Commands](markdown/MySQLCommands.md)
 
+## [SQL](markdown/SQL.md)
+
 ## [网络知识](markdown/Net.md)
 
 ## [Java](markdown/Java.md)
