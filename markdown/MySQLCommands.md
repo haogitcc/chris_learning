@@ -352,6 +352,7 @@
 
 ### 变量 (--variable-name=value)和布尔选项 {FALSE|TRUE} 值（阅读选项后）
 
+```text
 Variables (--variable-name=value)
 and boolean options {FALSE|TRUE}  Value (after reading options)
 --------------------------------- ----------------------------------------
@@ -415,7 +416,7 @@ plugin-dir                        (No default value)
 default-auth                      (No default value)
 binary-mode                       FALSE
 connect-expired-password          FALSE
-
+```
 
 ## --select-limit=# 
 
